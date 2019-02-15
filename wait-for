@@ -1,0 +1,18 @@
+#! /bin/bash
+# wait-for-db.sh
+
+cmd="$@"
+HOSTS=(first-db second-db)
+
+for host in ${HOSTS[@]};
+do
+    while ! mysqladmin ping -h$host -p{password_of_db} --silent; do
+        echo "$host is unavailable "
+      sleep 1
+    done
+    echo "$host is up"
+done
+
+echo "executing command"
+exec $cmd
+
